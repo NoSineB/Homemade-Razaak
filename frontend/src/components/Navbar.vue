@@ -1,10 +1,22 @@
 <script setup>
-import {RouterLink} from 'vue-router'
-import {ref} from 'vue'
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
 
-const cart = localStorage.getItem('cart')
+const userId = sessionStorage.getItem('user_id') ? sessionStorage.getItem('user_id') : 0
+const noOfItems = ref()
 
-const noOfItems = ref(JSON.parse(cart).length)
+onMounted(async function() { 
+    try{
+        const response = await axios.post('http://localhost:3000/cart/len', {
+           user_id: parseInt(userId)
+        })
+        noOfItems.value = response.data.length
+
+    }catch (error) {
+        noOfItems.value = ref()
+    }
+    }
+)
 
 </script>
 

@@ -1,16 +1,51 @@
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
+import { useStorage } from '@vueuse/core';
+import { useRouter } from 'vue-router';
+
+
+const email = ref('');
+const password = ref('');
+
+const router = useRouter()
+
+async function handleSubmit(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    try{
+        const response = await axios.post('http://localhost:3000/login', {
+            email: email.value,
+            password: password.value
+        })
+        useStorage('user_id', response.data.user_id, sessionStorage)
+
+        router.push({path: '/menu'})
+    }catch (error) {
+        console.error('Login failed:', error.response ? error.response.data : error.message);
+        alert('Login failed. Please check your credentials and try again.');
+    }
+
+    email.value = ""
+    password.value=""
+
+}
+
+</script>
+
 <template>
     <div class="form-container">
         <h2>Login to Your Account</h2>
-        <form action="" method="post">
+        <form @submit="handleSubmit" method="post">
             <div class="input-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Enter your email" required>
+                <input type="email" id="email" placeholder="Enter your email" required v-model="email">
             </div>
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password" required>
+                <input type="password" id="password" placeholder="Enter your password" required v-model="password">
             </div>
-            <button type="submit" class="btn-submit">Login</button>
+            <button type="submit" class="btn-submit" >Login</button>
             <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
         </form>
     </div>
@@ -19,6 +54,17 @@
 <style scoped>
 /* General Styles */
 body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #ffb347, #ffcc33);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#app {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(to right, #ffb347, #ffcc33);
     margin: 0;

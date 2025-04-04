@@ -11,7 +11,7 @@
     import Chappathi from "@/assets/images/Chappathi.jpg"
     import beafCurry from "@/assets/images/beaf curry.jpg"
 
-    import { useStorage } from '@vueuse/core'
+    import axios from "axios"
 
     const menuItems = [
         {
@@ -72,12 +72,23 @@
         },
     ]
 
-    const cart = useStorage('cart', [])
+async function addToCart(id) {
+    const user_id = sessionStorage.getItem('user_id') ? sessionStorage.getItem('user_id') : 0
 
-    function addToCart(itemId, event){
-        const itemToAdd = menuItems.filter((each) => each.id === itemId)
-        cart.value = [...cart.value, ...itemToAdd]
+    try{
+        const response = await axios.post('http://localhost:3000/cart', {
+            user_id: parseInt(user_id),
+            item_id: parseInt(id)
+        })
+
+        console.log(response.data)
+
+    }catch (error) {
+        console.error(error)
+        router.push({path: "/login"})
     }
+        
+}
 
 </script>
 
@@ -90,7 +101,7 @@
             <h3 v-text="each.itemName"></h3>
             <p v-text="each.description"></p>
             <p><strong>₹ <span v-text="each.price"></span></strong></p>
-            <button class="btn add-to-cart" @click="addToCart(each.id, $event)">Add to Cart</button>
+            <button class="btn add-to-cart" @click="addToCart(each.id)">Add to Cart</button>
         </div>
     </section>
 
