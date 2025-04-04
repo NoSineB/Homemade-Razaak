@@ -80,8 +80,6 @@ func GetCartTotal(c *fiber.Ctx) error {
 	}
 	db.Find(&user, requestBody.UserID)
 
-	fmt.Println(user)
-
 	if user.Email == "" {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "User not found"})
 	}

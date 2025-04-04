@@ -14,7 +14,7 @@ func ConnectDatabase() *gorm.DB {
 
 	db.AutoMigrate(&models.User{}, &models.Item{}, &models.CartItem{})
 
-	// Migrate()
+//	Migrate()
 
 	return db
 }
@@ -28,9 +28,9 @@ func Migrate() {
 	db.AutoMigrate(&models.User{}, &models.Item{}, &models.CartItem{})
 
 	user := models.User{
-		Name:     "benison",
+		Name:     "admin",
 		Password: "password",
-		Email:    "benison@example.com",
+		Email:    "admin@homemade.com",
 	}
 	db.Create(&user)
 
